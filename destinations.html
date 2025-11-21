@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destinations - The Boys Adventure Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #2C2C2C;
+            --accent-sand: #D4A574;
+            --accent-teal: #4A8B8B;
+            --stone-gray: #6B7280;
+            --off-white: #FAFAFA;
+            --burnt-orange: #CC6B3A;
+            --forest-green: #2D5A3D;
+            --midnight-blue: #1E3A5F;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--off-white);
+            color: var(--primary-dark);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-sand) 0%, var(--burnt-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(250, 250, 250, 0.9);
+        }
+        
+        .btn-primary {
+            background: var(--burnt-orange);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(204, 107, 58, 0.4);
+        }
+        
+        .package-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .package-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .calculator-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 20px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .slider-container {
+            position: relative;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--burnt-orange);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(204, 107, 58, 0.4);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--burnt-orange);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(204, 107, 58, 0.4);
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease;
+        }
+        
+        .activity-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .activity-icon:hover {
+            transform: scale(1.1);
+            border-color: var(--burnt-orange);
+        }
+        
+        .activity-icon.selected {
+            background: var(--burnt-orange);
+            border-color: var(--burnt-orange);
+            color: white;
+        }
+        
+        .price-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--burnt-orange);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .booking-progress {
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .booking-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--burnt-orange) 0%, var(--accent-sand) 100%);
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 nav-blur border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold text-gradient">The Boys</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">Home</a>
+                    <a href="destinations.html" class="text-orange-600 font-medium">Destinations</a>
+                    <a href="about.html" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">About</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">Contact</a>
+                </div>
+                <button class="md:hidden text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-12 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12 reveal">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Adventure Destinations</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Explore our carefully curated collection of extreme adventures, luxury escapes, and cultural immersions designed for the modern adventurer.
+                </p>
+            </div>
+            
+            <!-- Breadcrumb -->
+            <div class="flex items-center justify-center space-x-2 text-gray-500 reveal">
+                <a href="index.html" class="hover:text-orange-600">Home</a>
+                <span>→</span>
+                <span class="text-orange-600">Destinations</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Group Booking Simulator -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Group Adventure Calculator</h2>
+                <p class="text-xl text-gray-600">
+                    Plan your perfect group adventure with real-time pricing and customization options.
+                </p>
+            </div>
+            
+            <div class="calculator-card p-8 md:p-12 reveal">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- Calculator Controls -->
+                    <div class="space-y-8">
+                        <div>
+                            <label class="block text-lg font-semibold mb-4">Group Size</label>
+                            <div class="slider-container">
+                                <input type="range" min="4" max="12" value="6" class="slider" id="groupSize">
+                                <div class="flex justify-between text-sm text-gray-500 mt-2">
+                                    <span>4 people</span>
+                                    <span>12 people</span>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <span class="text-2xl font-bold text-orange-600" id="groupSizeDisplay">6</span>
+                                <span class="text-gray-600"> people</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-lg font-semibold mb-4">Adventure Duration</label>
+                            <div class="slider-container">
+                                <input type="range" min="5" max="21" value="10" class="slider" id="duration">
+                                <div class="flex justify-between text-sm text-gray-500 mt-2">
+                                    <span>5 days</span>
+                                    <span>21 days</span>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <span class="text-2xl font-bold text-orange-600" id="durationDisplay">10</span>
+                                <span class="text-gray-600"> days</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-lg font-semibold mb-4">Activity Preferences</label>
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="activity-icon" data-activity="hiking" title="Hiking & Trekking">🥾</div>
+                                <div class="activity-icon" data-activity="water" title="Water Sports">🏄</div>
+                                <div class="activity-icon" data-activity="extreme" title="Extreme Sports">⚡</div>
+                                <div class="activity-icon" data-activity="cultural" title="Cultural">🏛️</div>
+                                <div class="activity-icon" data-activity="luxury" title="Luxury">✨</div>
+                                <div class="activity-icon" data-activity="wildlife" title="Wildlife">🦁</div>
+                                <div class="activity-icon" data-activity="photography" title="Photography">📸</div>
+                                <div class="activity-icon" data-activity="camping" title="Camping">⛺</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-lg font-semibold mb-4">Luxury Level</label>
+                            <div class="space-y-3">
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="luxury" value="essential" class="text-orange-600" checked>
+                                    <span>Essential - Amazing experiences, smart spending</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="luxury" value="premium" class="text-orange-600">
+                                    <span>Premium - High-end adventures with comfort</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="luxury" value="ultra" class="text-orange-600">
+                                    <span>Ultra - Ultimate experiences, no compromises</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Price Display -->
+                    <div class="flex flex-col justify-center">
+                        <div class="text-center">
+                            <h3 class="text-2xl font-bold mb-6">Estimated Total Cost</h3>
+                            <div class="price-display mb-4" id="totalPrice">$42,000</div>
+                            <p class="text-gray-600 mb-6">For your group of <span id="groupSummary">6 people</span> • <span id="durationSummary">10 days</span></p>
+                            
+                            <!-- Price Breakdown Chart -->
+                            <div class="bg-white rounded-xl p-6 mb-6">
+                                <h4 class="font-semibold mb-4">Price Breakdown</h4>
+                                <div id="priceChart" style="height: 200px;"></div>
+                            </div>
+                            
+                            <div class="space-y-3 text-sm text-gray-600">
+                                <div class="flex justify-between">
+                                    <span>Per person:</span>
+                                    <span class="font-semibold" id="perPersonPrice">$7,000</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Deposit required (25%):</span>
+                                    <span class="font-semibold" id="depositPrice">$10,500</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn-primary w-full py-4 rounded-full font-bold text-lg mt-6" onclick="openBookingModal()">
+                                Book This Adventure
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Adventure Packages Grid -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">All Adventure Packages</h2>
+                <p class="text-xl text-gray-600">
+                    Browse our complete collection of premium adventure experiences.
+                </p>
+            </div>
+            
+            <!-- Package Filters -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12 reveal">
+                <button class="package-filter active px-6 py-3 rounded-full bg-orange-600 text-white font-medium" data-filter="all">
+                    All Packages
+                </button>
+                <button class="package-filter px-6 py-3 rounded-full bg-white text-gray-700 font-medium hover:bg-orange-100 transition-colors" data-filter="extreme">
+                    Extreme Sports
+                </button>
+                <button class="package-filter px-6 py-3 rounded-full bg-white text-gray-700 font-medium hover:bg-orange-100 transition-colors" data-filter="luxury">
+                    Luxury Adventures
+                </button>
+                <button class="package-filter px-6 py-3 rounded-full bg-white text-gray-700 font-medium hover:bg-orange-100 transition-colors" data-filter="cultural">
+                    Cultural
+                </button>
+                <button class="package-filter px-6 py-3 rounded-full bg-white text-gray-700 font-medium hover:bg-orange-100 transition-colors" data-filter="group">
+                    Group Trips
+                </button>
+            </div>
+            
+            <!-- Packages Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 reveal" id="packagesGrid">
+                <!-- Package cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold">Book Your Adventure</h3>
+                    <button onclick="closeBookingModal()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="booking-progress mb-8">
+                    <div class="booking-progress-bar" id="progressBar" style="width: 33%"></div>
+                </div>
+                
+                <div id="bookingStep1" class="booking-step">
+                    <h4 class="text-xl font-semibold mb-6">Step 1: Trip Details</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Preferred Start Date</label>
+                            <input type="date" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Alternative Dates (Optional)</label>
+                            <input type="text" placeholder="e.g., Any time in June 2024" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Special Requirements</label>
+                            <textarea placeholder="Any dietary restrictions, accessibility needs, or special requests..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent h-24"></textarea>
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-8">
+                        <button class="btn-primary px-8 py-3 rounded-full font-semibold" onclick="nextBookingStep(2)">
+                            Next Step
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="bookingStep2" class="booking-step hidden">
+                    <h4 class="text-xl font-semibold mb-6">Step 2: Contact Information</h4>
+                    <div class="space-y-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">First Name</label>
+                                <input type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Last Name</label>
+                                <input type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Email Address</label>
+                            <input type="email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Phone Number</label>
+                            <input type="tel" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Group Size</label>
+                            <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                <option>4-6 people</option>
+                                <option>7-9 people</option>
+                                <option>10-12 people</option>
+                                <option>12+ people</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-8">
+                        <button class="border-2 border-gray-300 text-gray-700 px-8 py-3 rounded-full font-semibold hover:bg-gray-50 transition-colors" onclick="nextBookingStep(1)">
+                            Previous
+                        </button>
+                        <button class="btn-primary px-8 py-3 rounded-full font-semibold" onclick="nextBookingStep(3)">
+                            Next Step
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="bookingStep3" class="booking-step hidden">
+                    <h4 class="text-xl font-semibold mb-6">Step 3: Review & Confirm</h4>
+                    <div class="bg-gray-50 p-6 rounded-xl mb-6">
+                        <h5 class="font-semibold mb-4">Booking Summary</h5>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>Adventure Package:</span>
+                                <span class="font-medium" id="selectedPackage">Patagonia Expedition</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Group Size:</span>
+                                <span class="font-medium" id="selectedGroupSize">6 people</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Duration:</span>
+                                <span class="font-medium" id="selectedDuration">10 days</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Total Cost:</span>
+                                <span class="font-bold text-orange-600" id="selectedTotal">$42,000</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Deposit Required (25%):</span>
+                                <span class="font-bold" id="selectedDeposit">$10,500</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" class="text-orange-600 rounded">
+                            <span class="text-sm">I agree to the Terms of Service and Privacy Policy</span>
+                        </label>
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" class="text-orange-600 rounded">
+                            <span class="text-sm">I want to receive updates about future adventures and special offers</span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button class="border-2 border-gray-300 text-gray-700 px-8 py-3 rounded-full font-semibold hover:bg-gray-50 transition-colors" onclick="nextBookingStep(2)">
+                            Previous
+                        </button>
+                        <button class="btn-primary px-8 py-3 rounded-full font-semibold" onclick="confirmBooking()">
+                            Confirm Booking
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center">
+                <div class="text-3xl font-bold text-gradient mb-4">The Boys</div>
+                <p class="text-gray-400 mb-8">Adventure Travel Agency - Forging Legends Since 2020</p>
+                <div class="flex justify-center space-x-8 mb-8">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2024 The Boys Adventure Travel. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Adventure packages data
+        const packages = [
+            {
+                id: 1,
+                name: "Patagonia Expedition",
+                price: 8500,
+                duration: 14,
+                category: ["extreme", "luxury"],
+                image: "https://kimi-web-img.moonshot.cn/img/au.buynship.com/337da0f968f66da988e73a33c2729d674508489d.png",
+                description: "14-day extreme adventure through the wildest landscapes on Earth.",
+                activities: ["hiking", "photography", "wildlife"],
+                difficulty: "Extreme",
+                groupSize: "6-12",
+                highlights: ["Torres del Paine", "Glacier hiking", "Wildlife encounters", "Professional photography"]
+            },
+            {
+                id: 2,
+                name: "Bhutan Snowman Trek",
+                price: 6200,
+                duration: 10,
+                category: ["cultural", "extreme"],
+                image: "https://kimi-web-img.moonshot.cn/img/www.trekking-in-bhutan.com/8131cba5653a358d8fabc7735a8cf521c6fc8bb1.jpg",
+                description: "10-day cultural immersion through the most spectacular Himalaya hike.",
+                activities: ["hiking", "cultural", "photography"],
+                difficulty: "Extreme",
+                groupSize: "4-8",
+                highlights: ["Remote monasteries", "High-altitude passes", "Local culture", "Mountain views"]
+            },
+            {
+                id: 3,
+                name: "Private Island Retreat",
+                price: 12000,
+                duration: 7,
+                category: ["luxury", "group"],
+                image: "https://kimi-web-img.moonshot.cn/img/media.cntraveler.com/68f5b4efe29fa80f02689f0dc4cb7eac3f8f3026.jpg",
+                description: "7-day luxury escape with your crew on exclusive private island.",
+                activities: ["water", "luxury", "photography"],
+                difficulty: "Easy",
+                groupSize: "8-12",
+                highlights: ["Private villa", "Water sports", "Gourmet dining", "Spa treatments"]
+            },
+            {
+                id: 4,
+                name: "Desert Off-Road Adventure",
+                price: 4800,
+                duration: 8,
+                category: ["extreme", "group"],
+                image: "https://kimi-web-img.moonshot.cn/img/media.tacdn.com/12e0d9eda19222ccbe86c614da55dd239a8ab023.jpg",
+                description: "8-day off-road adventure through the most challenging desert terrain.",
+                activities: ["extreme", "camping", "photography"],
+                difficulty: "Extreme",
+                groupSize: "6-10",
+                highlights: ["Off-road driving", "Desert camping", "Stargazing", "Adventure photography"]
+            },
+            {
+                id: 5,
+                name: "Extreme Sports Marathon",
+                price: 9500,
+                duration: 12,
+                category: ["extreme", "luxury"],
+                image: "https://kimi-web-img.moonshot.cn/img/www.theworldbucketlist.com/8d31ef4f0d96f8db29208cabeadbf49f338ad07f.jpg",
+                description: "12-day multi-sport challenge: climbing, surfing, skydiving, and more.",
+                activities: ["extreme", "water", "photography"],
+                difficulty: "Extreme",
+                groupSize: "4-8",
+                highlights: ["Rock climbing", "Skydiving", "Surfing", "Bungee jumping"]
+            },
+            {
+                id: 6,
+                name: "Safari Luxury Camp",
+                price: 7800,
+                duration: 9,
+                category: ["cultural", "luxury"],
+                image: "https://kimi-web-img.moonshot.cn/img/static.showit.co/67e0f1dc21724a84a06969a35f241dbc654b6b44.jpg",
+                description: "9-day luxury safari experience with premium camping and wildlife.",
+                activities: ["wildlife", "luxury", "photography"],
+                difficulty: "Moderate",
+                groupSize: "6-12",
+                highlights: ["Big Five safari", "Luxury tents", "Bush dinners", "Conservation talks"]
+            }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCalculator();
+            initializePackages();
+            initializeScrollReveal();
+            initializeFilters();
+        });
+
+        // Group booking calculator
+        function initializeCalculator() {
+            const groupSizeSlider = document.getElementById('groupSize');
+            const durationSlider = document.getElementById('duration');
+            const groupSizeDisplay = document.getElementById('groupSizeDisplay');
+            const durationDisplay = document.getElementById('durationDisplay');
+            const totalPriceDisplay = document.getElementById('totalPrice');
+            const perPersonPriceDisplay = document.getElementById('perPersonPrice');
+            const depositPriceDisplay = document.getElementById('depositPrice');
+            
+            function updateCalculator() {
+                const groupSize = parseInt(groupSizeSlider.value);
+                const duration = parseInt(durationSlider.value);
+                const luxuryLevel = document.querySelector('input[name="luxury"]:checked').value;
+                
+                // Update displays
+                groupSizeDisplay.textContent = groupSize;
+                durationDisplay.textContent = duration;
+                document.getElementById('groupSummary').textContent = `${groupSize} people`;
+                document.getElementById('durationSummary').textContent = `${duration} days`;
+                
+                // Calculate base price (assuming average package)
+                let basePrice = 7500; // Average package price
+                
+                // Adjust for duration
+                const durationMultiplier = duration / 10; // 10 days is baseline
+                
+                // Adjust for luxury level
+                const luxuryMultipliers = {
+                    essential: 0.8,
+                    premium: 1.0,
+                    ultra: 1.4
+                };
+                
+                const totalPrice = Math.round(basePrice * groupSize * durationMultiplier * luxuryMultipliers[luxuryLevel]);
+                const perPersonPrice = Math.round(totalPrice / groupSize);
+                const depositPrice = Math.round(totalPrice * 0.25);
+                
+                // Update price displays with animation
+                animatePriceChange(totalPriceDisplay, totalPrice);
+                animatePriceChange(perPersonPriceDisplay, perPersonPrice);
+                animatePriceChange(depositPriceDisplay, depositPrice);
+                
+                // Update chart
+                updatePriceChart(groupSize, duration, luxuryLevel);
+            }
+            
+            groupSizeSlider.addEventListener('input', updateCalculator);
+            durationSlider.addEventListener('input', updateCalculator);
+            document.querySelectorAll('input[name="luxury"]').forEach(radio => {
+                radio.addEventListener('change', updateCalculator);
+            });
+            
+            // Activity icons
+            document.querySelectorAll('.activity-icon').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+            
+            // Initial calculation
+            updateCalculator();
+        }
+
+        function animatePriceChange(element, newPrice) {
+            const currentPrice = parseInt(element.textContent.replace(/[^0-9]/g, '')) || 0;
+            
+            anime({
+                targets: { value: currentPrice },
+                value: newPrice,
+                duration: 800,
+                easing: 'easeOutQuart',
+                update: function(anim) {
+                    element.textContent = '$' + Math.round(anim.animatables[0].target.value).toLocaleString();
+                }
+            });
+        }
+
+        function updatePriceChart(groupSize, duration, luxuryLevel) {
+            const chart = echarts.init(document.getElementById('priceChart'));
+            
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: ${c} ({d}%)'
+                },
+                series: [{
+                    name: 'Cost Breakdown',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '16',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 40, name: 'Accommodation', itemStyle: { color: '#CC6B3A' } },
+                        { value: 25, name: 'Activities', itemStyle: { color: '#D4A574' } },
+                        { value: 20, name: 'Transportation', itemStyle: { color: '#4A8B8B' } },
+                        { value: 10, name: 'Meals', itemStyle: { color: '#2D5A3D' } },
+                        { value: 5, name: 'Equipment', itemStyle: { color: '#6B7280' } }
+                    ]
+                }]
+            };
+            
+            chart.setOption(option);
+        }
+
+        // Initialize packages grid
+        function initializePackages() {
+            const grid = document.getElementById('packagesGrid');
+            
+            packages.forEach(pkg => {
+                const card = createPackageCard(pkg);
+                grid.appendChild(card);
+            });
+        }
+
+        function createPackageCard(pkg) {
+            const card = document.createElement('div');
+            card.className = 'package-card';
+            card.setAttribute('data-category', pkg.category.join(' '));
+            
+            const activityTags = pkg.activities.map(activity => {
+                const tags = {
+                    hiking: { label: 'Hiking', color: 'bg-green-100 text-green-700' },
+                    water: { label: 'Water Sports', color: 'bg-blue-100 text-blue-700' },
+                    extreme: { label: 'Extreme', color: 'bg-red-100 text-red-700' },
+                    cultural: { label: 'Cultural', color: 'bg-purple-100 text-purple-700' },
+                    luxury: { label: 'Luxury', color: 'bg-yellow-100 text-yellow-700' },
+                    wildlife: { label: 'Wildlife', color: 'bg-orange-100 text-orange-700' },
+                    photography: { label: 'Photography', color: 'bg-pink-100 text-pink-700' },
+                    camping: { label: 'Camping', color: 'bg-green-100 text-green-700' }
+                };
+                const tag = tags[activity];
+                return `<span class="px-2 py-1 ${tag.color} rounded-full text-xs">${tag.label}</span>`;
+            }).join(' ');
+            
+            card.innerHTML = `
+                <div class="h-64 bg-cover bg-center" style="background-image: url('${pkg.image}')"></div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-xl font-bold">${pkg.name}</h3>
+                        <span class="text-orange-600 font-bold">$${pkg.price.toLocaleString()}</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">${pkg.description}</p>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">${pkg.difficulty}</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">${pkg.duration} days</span>
+                        </div>
+                        <span class="text-sm text-gray-500">${pkg.groupSize} people max</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        ${activityTags}
+                    </div>
+                    <div class="border-t pt-4">
+                        <h5 class="font-semibold mb-2 text-sm">Highlights:</h5>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            ${pkg.highlights.map(highlight => `<li>• ${highlight}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <button class="btn-primary w-full py-3 rounded-full font-semibold mt-4" onclick="selectPackage('${pkg.name}', ${pkg.price})">
+                        Select Package
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Package filters
+        function initializeFilters() {
+            const filterButtons = document.querySelectorAll('.package-filter');
+            const packageCards = document.querySelectorAll('.package-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.getAttribute('data-filter');
+                    
+                    // Update active button
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-orange-600', 'text-white');
+                        btn.classList.add('bg-white', 'text-gray-700');
+                    });
+                    
+                    button.classList.add('active', 'bg-orange-600', 'text-white');
+                    button.classList.remove('bg-white', 'text-gray-700');
+                    
+                    // Filter packages
+                    packageCards.forEach((card, index) => {
+                        const categories = card.getAttribute('data-category');
+                        const shouldShow = filter === 'all' || categories.includes(filter);
+                        
+                        if (shouldShow) {
+                            card.style.display = 'block';
+                            anime({
+                                targets: card,
+                                opacity: [0, 1],
+                                translateY: [30, 0],
+                                duration: 600,
+                                delay: index * 100,
+                                easing: 'easeOutQuart'
+                            });
+                        } else {
+                            anime({
+                                targets: card,
+                                opacity: [1, 0],
+                                translateY: [0, -30],
+                                duration: 300,
+                                complete: () => {
+                                    card.style.display = 'none';
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        }
+
+        // Scroll reveal
+        function initializeScrollReveal() {
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            revealElements.forEach(element => {
+                revealObserver.observe(element);
+            });
+        }
+
+        // Booking modal functions
+        function openBookingModal() {
+            document.getElementById('bookingModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextBookingStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.booking-step').forEach(s => s.classList.add('hidden'));
+            
+            // Show current step
+            document.getElementById(`bookingStep${step}`).classList.remove('hidden');
+            
+            // Update progress bar
+            const progress = (step / 3) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function confirmBooking() {
+            // Show success message
+            alert('Thank you for your booking! We will contact you within 24 hours to confirm your adventure details.');
+            closeBookingModal();
+        }
+
+        function selectPackage(name, price) {
+            document.getElementById('selectedPackage').textContent = name;
+            openBookingModal();
+        }
+    </script>
+</body>
+</html>

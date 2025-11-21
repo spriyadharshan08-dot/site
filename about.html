@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - The Boys Adventure Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #2C2C2C;
+            --accent-sand: #D4A574;
+            --accent-teal: #4A8B8B;
+            --stone-gray: #6B7280;
+            --off-white: #FAFAFA;
+            --burnt-orange: #CC6B3A;
+            --forest-green: #2D5A3D;
+            --midnight-blue: #1E3A5F;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--off-white);
+            color: var(--primary-dark);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-sand) 0%, var(--burnt-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(250, 250, 250, 0.9);
+        }
+        
+        .btn-primary {
+            background: var(--burnt-orange);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(204, 107, 58, 0.4);
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-12px) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background: var(--burnt-orange);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--burnt-orange);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 1.5rem;
+            width: 2px;
+            height: calc(100% + 1rem);
+            background: linear-gradient(to bottom, var(--burnt-orange), transparent);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .value-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .certification-badge {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .certification-badge:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .modal {
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 nav-blur border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold text-gradient">The Boys</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">Home</a>
+                    <a href="destinations.html" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">Destinations</a>
+                    <a href="about.html" class="text-orange-600 font-medium">About</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">Contact</a>
+                </div>
+                <button class="md:hidden text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-12 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12 reveal">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">About The Boys</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    We don't just plan adventures - we forge legends. Discover the story behind the brotherhood that's redefining extreme travel.
+                </p>
+            </div>
+            
+            <!-- Breadcrumb -->
+            <div class="flex items-center justify-center space-x-2 text-gray-500 reveal">
+                <a href="index.html" class="hover:text-orange-600">Home</a>
+                <span>→</span>
+                <span class="text-orange-600">About</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Company Story -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8">Our Story</h2>
+                    <div class="space-y-6 text-lg text-gray-700 leading-relaxed">
+                        <p>
+                            The Boys was born from a simple truth: the most extraordinary adventures are meant to be shared. In 2020, five lifelong friends returned from a life-changing expedition to Patagonia, realizing that what made the journey unforgettable wasn't just the destination - it was the brotherhood forged along the way.
+                        </p>
+                        <p>
+                            We started with a mission to create adventures that push boundaries while building unbreakable bonds. Every expedition we design is crafted around the principles of authentic experience, expert guidance, and the transformative power of shared challenge.
+                        </p>
+                        <p>
+                            Today, we've guided over 2,000 adventurers through some of the world's most extreme and beautiful places. But our greatest achievement isn't the miles traveled or peaks conquered - it's the lifelong friendships formed and the personal transformations witnessed.
+                        </p>
+                    </div>
+                    <div class="mt-8 grid grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-orange-600">2,000+</div>
+                            <div class="text-sm text-gray-600">Adventurers</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-orange-600">50+</div>
+                            <div class="text-sm text-gray-600">Destinations</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-orange-600">98%</div>
+                            <div class="text-sm text-gray-600">Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal">
+                    <img src="resources/team-guides.jpg" alt="The Boys Team" class="rounded-2xl shadow-2xl w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Meet the Brotherhood</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Our team isn't just experienced - they're passionate adventurers who've walked the path and lived to tell the tales.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 reveal">
+                <div class="team-card" onclick="openTeamModal('marcus')">
+                    <div class="h-64 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">MR</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Marcus Rodriguez</h3>
+                        <p class="text-orange-600 font-medium mb-3">Founder & Chief Adventure Officer</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Former Navy SEAL with 15+ years leading expeditions across 40+ countries. Specializes in extreme sports and survival training.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Mountaineering</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Survival</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card" onclick="openTeamModal('alex')">
+                    <div class="h-64 bg-gradient-to-br from-blue-400 to-teal-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">AT</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Alex Thompson</h3>
+                        <p class="text-orange-600 font-medium mb-3">Luxury Adventure Director</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Luxury travel expert who pioneered premium adventure experiences. Manages our exclusive partnerships and VIP services.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs">Luxury</span>
+                                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Culture</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card" onclick="openTeamModal('james')">
+                    <div class="h-64 bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">JC</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">James Chen</h3>
+                        <p class="text-orange-600 font-medium mb-3">Cultural Immersion Specialist</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Anthropologist and linguist fluent in 6 languages. Creates authentic cultural experiences and local connections.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Culture</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Languages</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card" onclick="openTeamModal('sarah')">
+                    <div class="h-64 bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">SM</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Sarah Mitchell</h3>
+                        <p class="text-orange-600 font-medium mb-3">Safety & Medical Director</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Wilderness EMT and safety protocol expert. Ensures every adventure meets the highest safety standards.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Medical</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Safety</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card" onclick="openTeamModal('david')">
+                    <div class="h-64 bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">DK</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">David Kim</h3>
+                        <p class="text-orange-600 font-medium mb-3">Technology & Operations</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Tech entrepreneur turned adventure guide. Manages our booking systems, gear innovation, and operational logistics.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs">Technology</span>
+                                <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Operations</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card" onclick="openTeamModal('elena')">
+                    <div class="h-64 bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">ER</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Elena Rodriguez</h3>
+                        <p class="text-orange-600 font-medium mb-3">Customer Experience Manager</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Hospitality industry veteran who ensures every client receives personalized, world-class service from booking to return.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <span class="px-2 py-1 bg-teal-100 text-teal-700 rounded text-xs">Service</span>
+                                <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">Experience</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Management Team -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Management Team</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    The visionary leaders driving The Boys' mission to forge legendary adventures and build unbreakable bonds.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 reveal">
+                <div class="team-card" onclick="openManagerModal('priya')">
+                    <div class="h-64 bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">P</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">PRIYADHARSHAN</h3>
+                        <p class="text-orange-600 font-medium mb-3">Chief Executive Officer</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Strategic visionary with 15+ years in luxury travel industry. Leads global expansion and partnership development.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs">Strategy</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Leadership</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card" onclick="openManagerModal('raveen')">
+                    <div class="h-64 bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">R</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">RAVEENTHARAN</h3>
+                        <p class="text-orange-600 font-medium mb-3">Chief Operations Officer</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Operations excellence expert ensuring seamless adventure delivery across all global destinations.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-teal-100 text-teal-700 rounded text-xs">Operations</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Efficiency</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card" onclick="openManagerModal('nausad')">
+                    <div class="h-64 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">N</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">NAUSAD</h3>
+                        <p class="text-orange-600 font-medium mb-3">Chief Financial Officer</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Financial strategist managing investment growth and sustainable business expansion across markets.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">Finance</span>
+                                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Growth</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card" onclick="openManagerModal('lokesh')">
+                    <div class="h-64 bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">L</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">LOKESH</h3>
+                        <p class="text-orange-600 font-medium mb-3">Chief Marketing Officer</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Brand visionary driving global recognition and customer engagement through innovative marketing strategies.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Marketing</span>
+                                <span class="px-2 py-1 bg-pink-100 text-pink-700 rounded text-xs">Brand</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card" onclick="openManagerModal('divakar')">
+                    <div class="h-64 bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">D</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">DIVAKAR</h3>
+                        <p class="text-orange-600 font-medium mb-3">Chief Technology Officer</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Technology innovator developing cutting-edge booking systems and digital adventure experiences.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Technology</span>
+                                <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs">Innovation</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card" onclick="openManagerModal('vijay')">
+                    <div class="h-64 bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center">
+                        <div class="text-6xl text-white font-bold">V</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">VIJAY</h3>
+                        <p class="text-orange-600 font-medium mb-3">Chief Experience Officer</p>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Customer experience perfectionist ensuring every adventure exceeds expectations and creates lasting memories.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-pink-100 text-pink-700 rounded text-xs">Experience</span>
+                                <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Quality</span>
+                            </div>
+                            <button class="text-orange-600 font-medium text-sm">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Company Timeline -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Our Journey</h2>
+                <p class="text-xl text-gray-600">
+                    From a wild idea to a global adventure community - here's how we built The Boys.
+                </p>
+            </div>
+            
+            <div class="reveal">
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold">The Beginning</h3>
+                            <span class="text-orange-600 font-semibold">2020</span>
+                        </div>
+                        <p class="text-gray-600">
+                            Five friends return from Patagonia with a vision: create adventures that forge unbreakable bonds. The Boys Adventure Travel is born in a garage with a laptop and a dream.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold">First Expedition</h3>
+                            <span class="text-orange-600 font-semibold">2021</span>
+                        </div>
+                        <p class="text-gray-600">
+                            Our first official expedition takes 12 adventurers to the Himalayas. The trip is a success, and word-of-mouth spreads like wildfire.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold">Luxury Division</h3>
+                            <span class="text-orange-600 font-semibold">2022</span>
+                        </div>
+                        <p class="text-gray-600">
+                            Launch of our luxury adventure division, offering premium experiences without compromising the authentic adventure spirit.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold">Global Expansion</h3>
+                            <span class="text-orange-600 font-semibold">2023</span>
+                        </div>
+                        <p class="text-gray-600">
+                            Opened offices in 5 countries and expanded to 50+ destinations. Introduced our signature group booking calculator and personalized adventure matching.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold">Award Recognition</h3>
+                            <span class="text-orange-600 font-semibold">2024</span>
+                        </div>
+                        <p class="text-gray-600">
+                            Named "Adventure Travel Company of the Year" and reached 2,000+ satisfied adventurers. Launched our sustainability initiative.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Values -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Our Core Values</h2>
+                <p class="text-xl text-gray-600">
+                    The principles that guide every adventure we create and every decision we make.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 reveal">
+                <div class="value-card">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h3 class="text-xl font-bold mb-3">Authentic Adventure</h3>
+                    <p class="text-gray-600">
+                        Real experiences in real places. No tourist traps, no artificial polish - just pure, unfiltered adventure that challenges and transforms.
+                    </p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="text-4xl mb-4">🤝</div>
+                    <h3 class="text-xl font-bold mb-3">Brotherhood First</h3>
+                    <p class="text-gray-600">
+                        Every expedition is designed to strengthen bonds. We believe the best adventures create friendships that last a lifetime.
+                    </p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="text-4xl mb-4">🛡️</div>
+                    <h3 class="text-xl font-bold mb-3">Safety Without Compromise</h3>
+                    <p class="text-gray-600">
+                        Expert guides, premium equipment, and rigorous safety protocols ensure you can push your limits with confidence.
+                    </p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="text-4xl mb-4">🌍</div>
+                    <h3 class="text-xl font-bold mb-3">Responsible Travel</h3>
+                    <p class="text-gray-600">
+                        We protect the places we explore through sustainable practices, local partnerships, and environmental stewardship.
+                    </p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="text-4xl mb-4">💎</div>
+                    <h3 class="text-xl font-bold mb-3">Premium Quality</h3>
+                    <p class="text-gray-600">
+                        From equipment to accommodations, we never compromise on quality. Every detail is carefully curated for excellence.
+                    </p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="text-xl font-bold mb-3">Personalized Experience</h3>
+                    <p class="text-gray-600">
+                        Every group is unique. We tailor each adventure to match your crew's personality, preferences, and adventure level.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications & Awards -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Certifications & Recognition</h2>
+                <p class="text-xl text-gray-600">
+                    Our commitment to excellence is recognized by industry leaders and certified by international organizations.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 reveal">
+                <div class="certification-badge">
+                    <div class="text-3xl mb-3">🏆</div>
+                    <h4 class="font-bold mb-2">Adventure Travel Company of the Year</h4>
+                    <p class="text-sm text-gray-600">Travel Excellence Awards 2024</p>
+                </div>
+                
+                <div class="certification-badge">
+                    <div class="text-3xl mb-3">🛡️</div>
+                    <h4 class="font-bold mb-2">ISO 45001 Safety Certified</h4>
+                    <p class="text-sm text-gray-600">International Safety Standards</p>
+                </div>
+                
+                <div class="certification-badge">
+                    <div class="text-3xl mb-3">🌱</div>
+                    <h4 class="font-bold mb-2">Sustainable Tourism Certified</h4>
+                    <p class="text-sm text-gray-600">Global Sustainable Tourism Council</p>
+                </div>
+                
+                <div class="certification-badge">
+                    <div class="text-3xl mb-3">⭐</div>
+                    <h4 class="font-bold mb-2">5-Star Customer Rating</h4>
+                    <p class="text-sm text-gray-600">Trustpilot & Google Reviews</p>
+                </div>
+                
+                <div class="certification-badge">
+                    <div class="text-3xl mb-3">🎓</div>
+                    <h4 class="font-bold mb-2">Wilderness First Responder</h4>
+                    <p class="text-sm text-gray-600">All Guides Certified</p>
+                </div>
+                
+                <div class="certification-badge">
+                    <div class="text-3xl mb-3">🌍</div>
+                    <h4 class="font-bold mb-2">Leave No Trace Certified</h4>
+                    <p class="text-sm text-gray-600">Environmental Ethics</p>
+                </div>
+                
+                <div class="certification-badge">
+                    <div class="text-3xl mb-3">📸</div>
+                    <h4 class="font-bold mb-2">Professional Photography</h4>
+                    <p class="text-sm text-gray-600">PPA Certified Staff</p>
+                </div>
+                
+                <div class="certification-badge">
+                    <div class="text-3xl mb-3">🚁</div>
+                    <h4 class="font-bold mb-2">Emergency Response</h4>
+                    <p class="text-sm text-gray-600">24/7 Medical Support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-gradient-to-br from-orange-600 to-red-600 text-white">
+        <div class="max-w-4xl mx-auto text-center px-6">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Join the Brotherhood?</h2>
+            <p class="text-xl mb-8 opacity-90">
+                Experience the difference that passion, expertise, and genuine care make in creating your next legendary adventure.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-white text-orange-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all" onclick="window.location.href='destinations.html'">
+                    Explore Adventures
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-orange-600 transition-all" onclick="window.location.href='contact.html'">
+                    Get Custom Quote
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Member Modal -->
+    <div id="teamModal" class="fixed inset-0 bg-black bg-opacity-50 modal flex items-center justify-center z-50 p-4 hidden">
+        <div class="modal-content">
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h3 id="modalName" class="text-2xl font-bold mb-2">Marcus Rodriguez</h3>
+                        <p id="modalTitle" class="text-orange-600 font-medium">Founder & Chief Adventure Officer</p>
+                    </div>
+                    <button onclick="closeTeamModal()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="font-semibold mb-3">Background</h4>
+                        <p id="modalBackground" class="text-gray-600">
+                            Former Navy SEAL with 15+ years leading expeditions across 40+ countries. Marcus brings unparalleled expertise in extreme environments and team leadership.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-3">Specializations</h4>
+                        <div id="modalSpecializations" class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Mountaineering</span>
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Survival Training</span>
+                            <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm">Extreme Sports</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-3">Favorite Adventure</h4>
+                        <p id="modalFavorite" class="text-gray-600">
+                            "Patagonia will always have my heart. There's something about that raw, untamed wilderness that strips everything down to what really matters."
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-3">Certifications</h4>
+                        <ul id="modalCertifications" class="text-gray-600 space-y-1">
+                            <li>• Wilderness First Responder</li>
+                            <li>• AMGA Certified Mountain Guide</li>
+                            <li>• Navy SEAL Training</li>
+                            <li>• Avalanche Safety Level 3</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center">
+                <div class="text-3xl font-bold text-gradient mb-4">The Boys</div>
+                <p class="text-gray-400 mb-8">Adventure Travel Agency - Forging Legends Since 2020</p>
+                <div class="flex justify-center space-x-8 mb-8">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2024 The Boys Adventure Travel. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Team member data
+        const teamMembers = {
+            marcus: {
+                name: "Marcus Rodriguez",
+                title: "Founder & Chief Adventure Officer",
+                background: "Former Navy SEAL with 15+ years leading expeditions across 40+ countries. Marcus brings unparalleled expertise in extreme environments and team leadership. His military background combined with deep passion for adventure creates the perfect foundation for our safety-first approach.",
+                specializations: ["Mountaineering", "Survival Training", "Extreme Sports", "Team Leadership"],
+                favorite: "\"Patagonia will always have my heart. There's something about that raw, untamed wilderness that strips everything down to what really matters. I learned more about myself in those 14 days than in years of city life.\"",
+                certifications: ["Wilderness First Responder", "AMGA Certified Mountain Guide", "Navy SEAL Training", "Avalanche Safety Level 3", "Swift Water Rescue"]
+            },
+            alex: {
+                name: "Alex Thompson",
+                title: "Luxury Adventure Director",
+                background: "Luxury travel expert who pioneered premium adventure experiences. Alex spent 10 years managing high-end resorts before combining his hospitality expertise with his passion for adventure. He ensures our luxury offerings maintain authenticity while providing world-class comfort.",
+                specializations: ["Luxury Travel", "Cultural Experiences", "VIP Services", "Partnership Management"],
+                favorite: "\"The private island retreats are special because they prove that adventure and luxury aren't mutually exclusive. Watching a group bond over shared challenges while enjoying five-star service - that's magic.\"",
+                certifications: ["Hospitality Management Degree", "Certified Travel Counselor", "Cultural Heritage Specialist", "Luxury Travel Advisor"]
+            },
+            james: {
+                name: "James Chen",
+                title: "Cultural Immersion Specialist",
+                background: "Anthropologist and linguist fluent in 6 languages. James has lived in 12 countries and brings deep cultural understanding to every expedition. His ability to create authentic connections with local communities transforms ordinary trips into life-changing cultural experiences.",
+                specializations: ["Cultural Anthropology", "Languages", "Local Connections", "Historical Context"],
+                favorite: "\"Bhutan changed my life. The way they measure success by Gross National Happiness instead of GDP - that's wisdom we all need. Every time I take a group there, I see minds being blown in the best way.\"",
+                certifications: ["PhD in Anthropology", "Fluent in 6 Languages", "Cultural Heritage Preservation", "Ethical Tourism Certification"]
+            },
+            sarah: {
+                name: "Sarah Mitchell",
+                title: "Safety & Medical Director",
+                background: "Wilderness EMT and safety protocol expert. Sarah spent 8 years as a paramedic before specializing in wilderness medicine. She develops and maintains our comprehensive safety protocols, ensuring every adventure meets the highest safety standards possible.",
+                specializations: ["Wilderness Medicine", "Emergency Response", "Safety Protocols", "Risk Management"],
+                favorite: "\"The most rewarding part is seeing people push their boundaries safely. When someone conquers a fear or achieves something they thought impossible - and they do it safely - that's why I do this work.\"",
+                certifications: ["Wilderness EMT", "Advanced Life Support", "Avalanche Rescue", "Swift Water Rescue", "Helicopter Rescue Technician"]
+            },
+            david: {
+                name: "David Kim",
+                title: "Technology & Operations",
+                background: "Tech entrepreneur turned adventure guide. David sold his first startup and decided to pursue his true passion. He manages our booking systems, gear innovation, and operational logistics, bringing cutting-edge technology to traditional adventure travel.",
+                specializations: ["Technology Integration", "Operations Management", "Gear Innovation", "System Optimization"],
+                favorite: "\"I'm a problem solver at heart. Whether it's developing our group booking calculator or testing new gear, I love finding better ways to do things. The intersection of technology and adventure is where innovation happens.\"",
+                certifications: ["Computer Science Degree", "Project Management Professional", "Operations Management", "Gear Design Certification"]
+            },
+            elena: {
+                name: "Elena Rodriguez",
+                title: "Customer Experience Manager",
+                background: "Hospitality industry veteran with 12 years managing luxury hotel operations. Elena ensures every client receives personalized, world-class service from initial inquiry to post-trip follow-up. Her attention to detail is legendary among our clients.",
+                specializations: ["Customer Service", "Experience Design", "Personalization", "Quality Assurance"],
+                favorite: "\"Every group is different, and I love figuring out what will make each adventure perfect for them. It's like being a detective for dreams - finding out what would make this trip absolutely unforgettable for this specific group of people.\"",
+                certifications: ["Hospitality Management", "Customer Experience Design", "Quality Management", "Personal Service Excellence"]
+            }
+        };
+
+        // Management team data
+        const managementTeam = {
+            priya: {
+                name: "PRIYADHARSHAN",
+                title: "Chief Executive Officer",
+                background: "Strategic visionary with over 15 years of leadership experience in the luxury travel industry. Priya has successfully scaled multiple adventure travel companies and forged key partnerships with premium brands worldwide. His expertise in market expansion and strategic planning has been instrumental in The Boys' rapid growth from a startup to a global adventure brand.",
+                specializations: ["Strategic Planning", "Global Expansion", "Partnership Development", "Market Analysis"],
+                favorite: "\"The most rewarding part of my role is seeing how our adventures transform not just individual lives, but entire groups of friends. When a team returns from an expedition with stronger bonds and unforgettable memories, that's when I know we've succeeded.\"",
+                certifications: ["MBA Strategic Management", "Certified Travel Executive", "International Business Diploma", "Leadership Excellence Certification"]
+            },
+            raveen: {
+                name: "RAVEENTHARAN",
+                title: "Chief Operations Officer",
+                background: "Operations excellence expert with a proven track record in scaling complex logistics operations across multiple continents. Raveentharan ensures that every adventure runs seamlessly, from initial booking to post-trip follow-up. His systematic approach to operations has reduced costs while improving service quality across all our global destinations.",
+                specializations: ["Operations Management", "Logistics Optimization", "Quality Assurance", "Process Improvement"],
+                favorite: "\"I love the challenge of coordinating complex adventures across different time zones and cultures. There's something deeply satisfying about seeing a perfectly executed expedition where every detail falls into place flawlessly.\"",
+                certifications: ["Operations Management Degree", "Six Sigma Black Belt", "Project Management Professional", "Supply Chain Certification"]
+            },
+            nausad: {
+                name: "NAUSAD",
+                title: "Chief Financial Officer",
+                background: "Financial strategist with extensive experience in investment management and sustainable business growth. Nausad manages our financial planning, investment strategies, and ensures sustainable profitability while maintaining our commitment to quality and safety. His financial acumen has enabled us to expand aggressively while maintaining strong fiscal health.",
+                specializations: ["Financial Strategy", "Investment Management", "Risk Assessment", "Business Growth"],
+                favorite: "\"What excites me most is finding the perfect balance between profitability and purpose. We're not just building a business - we're creating experiences that change lives, and doing it in a financially sustainable way.\"",
+                certifications: ["CPA License", "MBA Finance", "Investment Banking Certification", "Risk Management Professional"]
+            },
+            lokesh: {
+                name: "LOKESH",
+                title: "Chief Marketing Officer",
+                background: "Brand visionary and marketing innovator with a track record of building globally recognized adventure brands. Lokesh drives our marketing strategy, brand positioning, and customer engagement initiatives. His creative campaigns have increased brand awareness by 300% and established The Boys as a premium adventure travel destination.",
+                specializations: ["Brand Strategy", "Digital Marketing", "Customer Engagement", "Creative Campaigns"],
+                favorite: "\"Marketing adventure travel is about storytelling - capturing the essence of transformation that happens when people step outside their comfort zones. Every campaign we create is designed to inspire that next leap of faith.\"",
+                certifications: ["Marketing Management Degree", "Digital Marketing Certification", "Brand Strategy Expert", "Creative Direction Diploma"]
+            },
+            divakar: {
+                name: "DIVAKAR",
+                title: "Chief Technology Officer",
+                background: "Technology innovator and digital transformation expert specializing in travel technology solutions. Divakar leads our technology initiatives, from our advanced booking platform to virtual reality adventure previews. His technical innovations have streamlined our operations and enhanced the customer experience at every touchpoint.",
+                specializations: ["Technology Innovation", "Digital Transformation", "Platform Development", "User Experience"],
+                favorite: "\"I believe technology should enhance the human experience, not replace it. Our booking platform, mobile app, and VR previews are all designed to make adventure planning more intuitive and exciting.\"",
+                certifications: ["Computer Science Degree", "Software Architecture Certification", "Digital Transformation Expert", "UX Design Professional"]
+            },
+            vijay: {
+                name: "VIJAY",
+                title: "Chief Experience Officer",
+                background: "Customer experience perfectionist with deep expertise in luxury service delivery and customer satisfaction optimization. Vijay ensures that every aspect of the customer journey exceeds expectations, from initial inquiry to post-adventure follow-up. His focus on experience excellence has resulted in our industry-leading customer satisfaction scores.",
+                specializations: ["Customer Experience", "Service Excellence", "Quality Assurance", "Customer Satisfaction"],
+                favorite: "\"Every customer interaction is an opportunity to create a memorable moment. Whether it's a seamless booking process or a surprise upgrade during their adventure, we aim to delight at every touchpoint.\"",
+                certifications: ["Hospitality Management Degree", "Customer Experience Design", "Service Excellence Certification", "Quality Management Professional"]
+            }
+        };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeScrollReveal();
+        });
+
+        // Scroll reveal
+        function initializeScrollReveal() {
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            revealElements.forEach(element => {
+                revealObserver.observe(element);
+            });
+        }
+
+        // Team modal functions
+        function openTeamModal(memberId) {
+            const member = teamMembers[memberId];
+            if (!member) return;
+            
+            // Populate modal content
+            document.getElementById('modalName').textContent = member.name;
+            document.getElementById('modalTitle').textContent = member.title;
+            document.getElementById('modalBackground').textContent = member.background;
+            document.getElementById('modalFavorite').textContent = member.favorite;
+            
+            // Specializations
+            const specializationsContainer = document.getElementById('modalSpecializations');
+            specializationsContainer.innerHTML = member.specializations.map(spec => 
+                `<span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">${spec}</span>`
+            ).join(' ');
+            
+            // Certifications
+            const certificationsContainer = document.getElementById('modalCertifications');
+            certificationsContainer.innerHTML = member.certifications.map(cert => 
+                `<li>• ${cert}</li>`
+            ).join('');
+            
+            // Show modal
+            document.getElementById('teamModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTeamModal() {
+            document.getElementById('teamModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Management team modal functions
+        function openManagerModal(managerId) {
+            const manager = managementTeam[managerId];
+            if (!manager) return;
+            
+            // Populate modal content
+            document.getElementById('modalName').textContent = manager.name;
+            document.getElementById('modalTitle').textContent = manager.title;
+            document.getElementById('modalBackground').textContent = manager.background;
+            document.getElementById('modalFavorite').textContent = manager.favorite;
+            
+            // Specializations
+            const specializationsContainer = document.getElementById('modalSpecializations');
+            specializationsContainer.innerHTML = manager.specializations.map(spec => 
+                `<span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">${spec}</span>`
+            ).join(' ');
+            
+            // Certifications
+            const certificationsContainer = document.getElementById('modalCertifications');
+            certificationsContainer.innerHTML = manager.certifications.map(cert => 
+                `<li>• ${cert}</li>`
+            ).join('');
+            
+            // Show modal
+            document.getElementById('teamModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal on overlay click
+        document.getElementById('teamModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTeamModal();
+            }
+        });
+
+        // Make manager modal functions globally available
+        window.openManagerModal = openManagerModal;
+    </script>
+</body>
+</html>

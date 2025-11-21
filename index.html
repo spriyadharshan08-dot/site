@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Boys - Adventure Travel Agency</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #2C2C2C;
+            --accent-sand: #D4A574;
+            --accent-teal: #4A8B8B;
+            --stone-gray: #6B7280;
+            --off-white: #FAFAFA;
+            --burnt-orange: #CC6B3A;
+            --forest-green: #2D5A3D;
+            --midnight-blue: #1E3A5F;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--off-white);
+            color: var(--primary-dark);
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.3) 0%, rgba(44, 44, 44, 0.5) 100%),
+                        url('resources/hero-adventure.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-sand) 0%, var(--burnt-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) rotateX(2deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .btn-primary {
+            background: var(--burnt-orange);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(204, 107, 58, 0.4);
+        }
+        
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(250, 250, 250, 0.9);
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease;
+        }
+        
+        .quiz-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .quiz-option:hover {
+            background: var(--accent-sand);
+            transform: scale(1.02);
+        }
+        
+        .quiz-option.selected {
+            background: var(--burnt-orange);
+            color: white;
+        }
+        
+        .destination-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .destination-card:hover {
+            transform: translateY(-12px) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 20px rgba(212, 165, 116, 0.4); }
+            to { box-shadow: 0 0 40px rgba(212, 165, 116, 0.8); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 nav-blur border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold text-gradient">The Boys</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">Home</a>
+                    <a href="destinations.html" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">Destinations</a>
+                    <a href="about.html" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">About</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">Contact</a>
+                </div>
+                <button class="md:hidden text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+        <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
+            <h1 class="text-6xl md:text-8xl font-bold mb-6 leading-tight">
+                <span id="typed-text"></span>
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 font-light max-w-2xl mx-auto">
+                Forge legendary bonds through extreme adventures. Premium experiences for those who seek the extraordinary.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="btn-primary px-8 py-4 rounded-full font-semibold text-lg">
+                    Start Your Adventure
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-gray-900 transition-all">
+                    Watch Trailer
+                </button>
+            </div>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 floating-element">
+            <div class="w-16 h-16 bg-orange-500 rounded-full opacity-20"></div>
+        </div>
+        <div class="absolute bottom-32 right-16 floating-element" style="animation-delay: -2s;">
+            <div class="w-12 h-12 bg-yellow-600 rounded-full opacity-30"></div>
+        </div>
+    </section>
+
+    <!-- Adventure Package Explorer -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Choose Your Adventure</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    From extreme sports to cultural immersion, find the perfect expedition for your crew.
+                </p>
+            </div>
+            
+            <!-- Adventure Filters -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12 reveal">
+                <button class="filter-btn active px-6 py-3 rounded-full bg-orange-600 text-white font-medium" data-filter="all">
+                    All Adventures
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full bg-white text-gray-700 font-medium hover:bg-orange-100 transition-colors" data-filter="extreme">
+                    Extreme Sports
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full bg-white text-gray-700 font-medium hover:bg-orange-100 transition-colors" data-filter="cultural">
+                    Cultural
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full bg-white text-gray-700 font-medium hover:bg-orange-100 transition-colors" data-filter="luxury">
+                    Luxury
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full bg-white text-gray-700 font-medium hover:bg-orange-100 transition-colors" data-filter="group">
+                    Group Trips
+                </button>
+            </div>
+            
+            <!-- Adventure Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 reveal">
+                <div class="destination-card card-hover" data-category="extreme luxury" data-price="8500" data-duration="14">
+                    <div class="h-64 bg-cover bg-center rounded-t-16" style="background-image: url('https://kimi-web-img.moonshot.cn/img/au.buynship.com/337da0f968f66da988e73a33c2729d674508489d.png')"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">Patagonia Expedition</h3>
+                            <span class="text-orange-600 font-bold">$8,500</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">14-day extreme adventure through the wildest landscapes on Earth.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm">Extreme</span>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Luxury</span>
+                            </div>
+                            <button class="text-orange-600 font-medium hover:text-orange-800">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card card-hover" data-category="cultural extreme" data-price="6200" data-duration="10">
+                    <div class="h-64 bg-cover bg-center rounded-t-16" style="background-image: url('https://kimi-web-img.moonshot.cn/img/www.trekking-in-bhutan.com/8131cba5653a358d8fabc7735a8cf521c6fc8bb1.jpg')"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">Bhutan Snowman Trek</h3>
+                            <span class="text-orange-600 font-bold">$6,200</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">10-day cultural immersion through the most spectacular Himalaya hike.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">Cultural</span>
+                                <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm">Extreme</span>
+                            </div>
+                            <button class="text-orange-600 font-medium hover:text-orange-800">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card card-hover" data-category="luxury group" data-price="12000" data-duration="7">
+                    <div class="h-64 bg-cover bg-center rounded-t-16" style="background-image: url('https://kimi-web-img.moonshot.cn/img/media.cntraveler.com/68f5b4efe29fa80f02689f0dc4cb7eac3f8f3026.jpg')"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">Private Island Retreat</h3>
+                            <span class="text-orange-600 font-bold">$12,000</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">7-day luxury escape with your crew on exclusive private island.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Luxury</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Group</span>
+                            </div>
+                            <button class="text-orange-600 font-medium hover:text-orange-800">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card card-hover" data-category="extreme group" data-price="4800" data-duration="8">
+                    <div class="h-64 bg-cover bg-center rounded-t-16" style="background-image: url('https://kimi-web-img.moonshot.cn/img/media.tacdn.com/12e0d9eda19222ccbe86c614da55dd239a8ab023.jpg')"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">Desert Off-Road</h3>
+                            <span class="text-orange-600 font-bold">$4,800</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">8-day off-road adventure through the most challenging desert terrain.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm">Extreme</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Group</span>
+                            </div>
+                            <button class="text-orange-600 font-medium hover:text-orange-800">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card card-hover" data-category="extreme luxury" data-price="9500" data-duration="12">
+                    <div class="h-64 bg-cover bg-center rounded-t-16" style="background-image: url('https://kimi-web-img.moonshot.cn/img/www.theworldbucketlist.com/8d31ef4f0d96f8db29208cabeadbf49f338ad07f.jpg')"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">Extreme Sports Marathon</h3>
+                            <span class="text-orange-600 font-bold">$9,500</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">12-day multi-sport challenge: climbing, surfing, skydiving, and more.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm">Extreme</span>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Luxury</span>
+                            </div>
+                            <button class="text-orange-600 font-medium hover:text-orange-800">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card card-hover" data-category="cultural luxury" data-price="7800" data-duration="9">
+                    <div class="h-64 bg-cover bg-center rounded-t-16" style="background-image: url('https://kimi-web-img.moonshot.cn/img/static.showit.co/67e0f1dc21724a84a06969a35f241dbc654b6b44.jpg')"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">Safari Luxury Camp</h3>
+                            <span class="text-orange-600 font-bold">$7,800</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">9-day luxury safari experience with premium camping and wildlife.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">Cultural</span>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Luxury</span>
+                            </div>
+                            <button class="text-orange-600 font-medium hover:text-orange-800">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Travel Personality Quiz -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Find Your Perfect Adventure</h2>
+                <p class="text-xl text-gray-600">
+                    Take our quick quiz to discover which adventure matches your personality.
+                </p>
+            </div>
+            
+            <div id="quiz-container" class="reveal">
+                <div class="quiz-question active" data-question="1">
+                    <h3 class="text-2xl font-bold mb-8 text-center">What's your ideal group size?</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="quiz-option p-6 border-2 border-gray-200 rounded-xl text-center" data-value="small">
+                            <div class="text-4xl mb-4">👥</div>
+                            <h4 class="font-semibold mb-2">Small Crew (2-4)</h4>
+                            <p class="text-gray-600">Intimate bonding with your closest friends</p>
+                        </div>
+                        <div class="quiz-option p-6 border-2 border-gray-200 rounded-xl text-center" data-value="large">
+                            <div class="text-4xl mb-4">🎉</div>
+                            <h4 class="font-semibold mb-2">Full Squad (6-12)</h4>
+                            <p class="text-gray-600">Epic adventures with the whole gang</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-question" data-question="2">
+                    <h3 class="text-2xl font-bold mb-8 text-center">What's your adventure style?</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="quiz-option p-6 border-2 border-gray-200 rounded-xl text-center" data-value="extreme">
+                            <div class="text-4xl mb-4">⚡</div>
+                            <h4 class="font-semibold mb-2">Extreme Sports</h4>
+                            <p class="text-gray-600">Adrenaline-fueled challenges</p>
+                        </div>
+                        <div class="quiz-option p-6 border-2 border-gray-200 rounded-xl text-center" data-value="cultural">
+                            <div class="text-4xl mb-4">🏛️</div>
+                            <h4 class="font-semibold mb-2">Cultural Immersion</h4>
+                            <p class="text-gray-600">Deep local experiences</p>
+                        </div>
+                        <div class="quiz-option p-6 border-2 border-gray-200 rounded-xl text-center" data-value="luxury">
+                            <div class="text-4xl mb-4">✨</div>
+                            <h4 class="font-semibold mb-2">Luxury Adventure</h4>
+                            <p class="text-gray-600">Premium comfort meets adventure</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-question" data-question="3">
+                    <h3 class="text-2xl font-bold mb-8 text-center">What's your budget range?</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="quiz-option p-6 border-2 border-gray-200 rounded-xl text-center" data-value="budget">
+                            <div class="text-4xl mb-4">💰</div>
+                            <h4 class="font-semibold mb-2">Essential ($3k-6k)</h4>
+                            <p class="text-gray-600">Amazing experiences, smart spending</p>
+                        </div>
+                        <div class="quiz-option p-6 border-2 border-gray-200 rounded-xl text-center" data-value="premium">
+                            <div class="text-4xl mb-4">💎</div>
+                            <h4 class="font-semibold mb-2">Premium ($6k-10k)</h4>
+                            <p class="text-gray-600">High-end adventures with comfort</p>
+                        </div>
+                        <div class="quiz-option p-6 border-2 border-gray-200 rounded-xl text-center" data-value="luxury">
+                            <div class="text-4xl mb-4">👑</div>
+                            <h4 class="font-semibold mb-2">Luxury ($10k+)</h4>
+                            <p class="text-gray-600">Ultimate experiences, no compromises</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="quiz-results" class="hidden text-center">
+                    <h3 class="text-3xl font-bold mb-8">Your Perfect Adventure Match</h3>
+                    <div id="result-content" class="bg-gradient-to-br from-orange-50 to-yellow-50 p-8 rounded-2xl">
+                        <!-- Results will be populated by JavaScript -->
+                    </div>
+                    <button class="btn-primary px-8 py-4 rounded-full font-semibold text-lg mt-8" onclick="restartQuiz()">
+                        Take Quiz Again
+                    </button>
+                </div>
+                
+                <div class="flex justify-center mt-8">
+                    <div class="flex space-x-2">
+                        <div class="quiz-dot w-3 h-3 rounded-full bg-orange-600"></div>
+                        <div class="quiz-dot w-3 h-3 rounded-full bg-gray-300"></div>
+                        <div class="quiz-dot w-3 h-3 rounded-full bg-gray-300"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Adventures Carousel -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Epic Adventures Await</h2>
+                <p class="text-xl text-gray-600">
+                    Join the brotherhood of adventure seekers who've experienced the extraordinary.
+                </p>
+            </div>
+            
+            <div class="splide reveal" id="adventure-carousel">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <div class="relative h-96 rounded-2xl overflow-hidden">
+                                <img src="https://kimi-web-img.moonshot.cn/img/images.squarespace-cdn.com/2a5f2208130ab3048de05626500bd6bdcc186fe1.jpg" alt="Adventure Photography" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 text-white">
+                                    <h3 class="text-2xl font-bold mb-2">Capture the Moment</h3>
+                                    <p class="text-lg">Professional adventure photography included</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="relative h-96 rounded-2xl overflow-hidden">
+                                <img src="https://kimi-web-img.moonshot.cn/img/cdn-content.adventuretravel.biz/952c4b8fbe7c3d14cdf5b3939a0212e9d57540c9.jpg" alt="Expert Guides" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 text-white">
+                                    <h3 class="text-2xl font-bold mb-2">Expert Guides</h3>
+                                    <p class="text-lg">Certified professionals with local expertise</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="relative h-96 rounded-2xl overflow-hidden">
+                                <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/97fe9a30901aaea239268b90796d0a6d946afb52.jpg" alt="Premium Equipment" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 text-white">
+                                    <h3 class="text-2xl font-bold mb-2">Premium Gear</h3>
+                                    <p class="text-lg">Top-of-the-line equipment provided</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Brotherhood Stories</h2>
+                <p class="text-xl text-gray-600">
+                    Real adventures from real adventurers who've experienced the extraordinary.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 reveal">
+                <div class="bg-gradient-to-br from-orange-50 to-yellow-50 p-8 rounded-2xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            M
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Marcus Rodriguez</h4>
+                            <p class="text-gray-600">Patagonia Expedition</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "The Boys didn't just take us to Patagonia - they created a brotherhood. That 14-day expedition changed my life and gave me friends for life."
+                    </p>
+                    <div class="flex text-yellow-500">
+                        ⭐⭐⭐⭐⭐
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-blue-50 to-teal-50 p-8 rounded-2xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            J
+                        </div>
+                        <div>
+                            <h4 class="font-bold">James Chen</h4>
+                            <p class="text-gray-600">Bhutan Trek</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "The cultural immersion was incredible. The guides knew every hidden gem, and the group dynamics were perfect. Already planning our next adventure."
+                    </p>
+                    <div class="flex text-yellow-500">
+                        ⭐⭐⭐⭐⭐
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            A
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Alex Thompson</h4>
+                            <p class="text-gray-600">Private Island</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "Luxury meets adventure perfectly. The private island retreat was exactly what our group needed - pure paradise with the right amount of adventure."
+                    </p>
+                    <div class="flex text-yellow-500">
+                        ⭐⭐⭐⭐⭐
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-gradient-to-br from-orange-600 to-red-600 text-white">
+        <div class="max-w-4xl mx-auto text-center px-6">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready for Your Legend?</h2>
+            <p class="text-xl mb-8 opacity-90">
+                Join the brotherhood of adventurers who've discovered that the best stories are lived, not told.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-white text-orange-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all pulse-glow">
+                    Book Your Adventure
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-orange-600 transition-all">
+                    Get Custom Quote
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center">
+                <div class="text-3xl font-bold text-gradient mb-4">The Boys</div>
+                <p class="text-gray-400 mb-8">Adventure Travel Agency - Forging Legends Since 2020</p>
+                <div class="flex justify-center space-x-8 mb-8">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2024 The Boys Adventure Travel. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
